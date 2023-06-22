@@ -1,7 +1,7 @@
 ### About 
 
 Todo application
-This is a very simple todo app that created to familiarise myself with creating a CRUD (Create, read, update, delete) application. I used ReactJS for my forntend and Firebase for backend services.
+This is a very simple todo app that I created to familiarise myself with creating a CRUD (Create, read, update, delete) application. I used ReactJS for my forntend and Firebase for backend services.
 I used the Firebase database to add, update and delete Todo tasks in the backend. Firebase hosting is used to deploy the application.
 
 
