@@ -1,13 +1,7 @@
 // Import React + Firebase instance + Firebase functions
 import React, { useEffect, useState } from 'react';
 import { db } from '../Firebase';
-import {
-  collection,
-  onSnapshot,
-  deleteDoc,
-  updateDoc,
-  doc,
-} from 'firebase/firestore';
+import { collection, onSnapshot, deleteDoc, updateDoc, doc } from 'firebase/firestore';
 
 // Import Icons for the Todo buttons
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
@@ -17,10 +11,13 @@ import DoneIcon from '@mui/icons-material/Done';
 
 // Functional component: TodoList for listing Todo subjects that have been created
 function TodoList() {
+
+  //Declare state variables
   const [todos, setTodos] = useState([]);
   const [editTodo, setEditTodo] = useState(null);
   const [editedSubject, setEditedSubject] = useState('');
 
+  // Fetches and listens to updates for the todo items from Firebase database
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, 'todos'), (snapshot) => {
       const updatedTodos = snapshot.docs.map((doc) => ({
@@ -30,7 +27,7 @@ function TodoList() {
       setTodos(updatedTodos);
     });
 
-    return () => unsubscribe();
+    return () => unsubscribe();// Cancels the listerner when the component is unmounted
   }, []);
 
   const deleteTodo = async (id) => {
@@ -60,17 +57,18 @@ function TodoList() {
     });
   };
 
-  const handleEditBlur = () => {
+  const handleEditDone = () => {
     setEditTodo(null);
     updateSubject();
   };
 
+  // JSX structure for TodoList component
   return (
     <div className="TodoList">
       {todos.map((todo) => (
         <div key={todo.id} className={`todo-strip ${todo.completed ? 'completed' : ''}`}>
           {editTodo === todo ? (
-            <>
+            <div>
               <input
                 type="text"
                 className="edit-input"
@@ -78,15 +76,15 @@ function TodoList() {
                 onChange={handleEditChange}
                 autoFocus
               />
-              <button id="done-button" onClick={handleEditBlur}>
+              <button id="done-button" onClick={handleEditDone}>
                 <DoneIcon />
               </button>
-            </>
+            </div>
           ) : (
             <span>{todo.Subject}</span>
           )}
           {!editTodo && (
-            <>
+            <div>
               {!todo.completed && (
                 <button id="complete-button" onClick={() => markCompleted(todo.id)}>
                   <CheckCircleOutlineIcon />
@@ -100,7 +98,7 @@ function TodoList() {
               <button id="delete-button" onClick={() => deleteTodo(todo.id)}>
                 <DeleteOutlineIcon />
               </button>
-            </>
+            </div>
           )}
         </div>
       ))}
